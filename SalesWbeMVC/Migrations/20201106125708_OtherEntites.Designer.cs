@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SalesWbeMVC.Data;
 
 namespace SalesWbeMVC.Migrations
 {
     [DbContext(typeof(SalesWbeMVCContext))]
-    partial class SalesWbeMVCContextModelSnapshot : ModelSnapshot
+    [Migration("20201106125708_OtherEntites")]
+    partial class OtherEntites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
