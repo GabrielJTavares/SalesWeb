@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SalesWbeMVC.Models;
+using SalesWbeMVC.Models.ViewModels;
 using SalesWbeMVC.Services;
 
 namespace SalesWbeMVC.Controllers
@@ -12,9 +13,11 @@ namespace SalesWbeMVC.Controllers
     {
 
         private readonly SellerService _sellerService;
-        public SellersController(SellerService sellerService)
+        private readonly DepartamentService _departamentService;
+        public SellersController(SellerService sellerService, DepartamentService departamentService)
         {
             _sellerService = sellerService;
+            _departamentService = departamentService;
         }
         public IActionResult Index()
         {
@@ -23,7 +26,9 @@ namespace SalesWbeMVC.Controllers
         }
         public IActionResult Create()
         {
-            return View();
+            var departaments = _departamentService.FindAll();
+            var viewModel = new SellerFormViewModel { Departaments = departaments };
+            return View(viewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -31,6 +36,31 @@ namespace SalesWbeMVC.Controllers
         {
             _sellerService.Insert(seller);
            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellerService.FindById(id.Value);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            _sellerService.Remove(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
